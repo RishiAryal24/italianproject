@@ -1,0 +1,86 @@
+<!--
+  The host page that loads all space apointmented from the database.
+-->
+{% extends "layout.html" %}
+{% block content %}
+<div class="col-md-12" >
+    <div class="bannar">
+  <div class="top">
+    <center>
+      <h1 style="color: white;">Welcome to Fine Health Patient Management System</h1>
+      <h3 style="color: white;">Where Booking Appiontment is possible</h3>
+      <a href="{{ url_for('main.about') }}" class="btn btn-primary me-md-2">More Details</a>
+    </center>
+  </div>
+</div>
+</div>
+
+
+<div style=" clear: both;"></div>
+ <div class="col-md-12">
+  <p>Fine Health is committed to delivering exceptional healthcare services through our advanced patient management system. <br>Our platform is tailored to optimize the patient experience, from simplified appointment scheduling to secure access to comprehensive medical records and seamless billing processes. <br>With a focus on promoting patient-centric care, we facilitate effective communication channels between healthcare providers and patients.</p>
+  <h2 class="text-light">Statistical Details</h2>
+<table class="table table-dark">
+  <thead class="thead-light">
+        <tr>
+            <th>Medical Condition</th>
+            <th>Count</th>
+        </tr>
+  </thead>
+  <tbody>
+        {% for detail in statistical_details %}
+            <tr>
+                <td>{{ detail.med_condition }}</td>
+                <td>{{ detail.count }}</td>
+            </tr>
+        {% endfor %}
+  </tbody>
+</table>
+<div class="col-7" style=" background: white;">
+ <canvas id="myChart" width="400" height="400" ></canvas>
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var statisticalDetails = {{ statistical_details | tojson }};
+
+        var labels = statisticalDetails.map(function(item) {
+            return item.med_condition;
+        });
+        var data = statisticalDetails.map(function(item) {
+            return item.count;
+        });
+
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Count of Medical Conditions',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+  </div>
+  <div style=" clear: both;"></div>
+  <br>
+      <div class="col-md-12" style=" color: white; ">
+    <h2 style=" color: white; ">BOOK YOUR NEXT APPOINTMENT WITH A DOCTOR?</h2>
+
+<p>We make booking your appiontment with a doctor quick and easy. Enquire today and you could be in with a doctor in the next few days.<br>
+We look forward to serving you and ensuring a smooth and reliable healthcare experience. Thank you for choosing our patient management system.
+</p>
+  </div>
+  </div>
+   
+{% endblock content %}

@@ -1,0 +1,64 @@
+<!--
+  The host page that loads all space apointmented from the database.
+-->
+{% extends "worker_layout.html" %}
+{% block content %}
+
+<div style=" clear: both;"></div>
+<div class="col-md-12 topbar text-muted" style="color: black;">
+    <div class="col-5 search" style="">
+    <form method="GET" action="{{ url_for('patientrecords.medsearch') }}">
+      <div class="form-group">
+    <label for="med_condition" class="form-control-label">Search Users Medical Record:</label>
+    <select id="med_condition" name="med_condition" class="form-control form-control-lg">
+      {% for condition in distinct_conditions %}
+        <option value="{{ condition[0] }}">{{ condition[0] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+    <div class="form-group">
+    <input type="submit" value="Search" class="btn btn-outline-info">
+    </div>
+</form>
+</div>
+  <div style=" clear: both;"></div>
+<div class="row">
+ {% for medical in medicals: %}
+    <div class="col-4">
+        <article class="media content-section" >
+          
+          <div class="media-body">
+            <h2><a class="article-title" >{{ medical.med_condition }}</a></h2>
+            <p class="article-content">Allergie to {{ medical.allergies }}</p>
+            <p class="article-content">Condition: {{ medical.med_condition }}</p>
+            <p class="article-content">Medication: {{ medical.medication }}</p>
+            <p class="article-content">Symptoms: 
+               <ul>
+                {% for key, value in symptoms.items() %}
+                    <li>{{ key }}: {{ value }}</li>
+                {% endfor %}
+                </ul>
+            </p>
+            <div class="article-metadata">
+              <a class="mr-2" >{{ medical.record.patient_name }}</a>
+              <small class="text-muted">{{ medical.date_posted.strftime('%Y-%m-%d') }}</small>
+            </div>
+          
+        </article>
+      </div>
+    {% endfor %}
+    </div>
+    <div style=" clear: both;"></div>
+    {% for page_num in medicals.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if medicals.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('patientrecords.allmedicalrecord', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('patientrecords.allmedicalrecord', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+    </div>
+{% endblock content %}

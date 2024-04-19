@@ -1,0 +1,41 @@
+<!--
+  The host page that loads all space apointmented from the database.
+-->
+{% extends "worker_layout.html" %}
+{% block content %}
+<div style=" clear: both;"></div>
+<div class="col-md-12 topbar text-muted" style="color: black;">
+<div style=" clear: both;"></div>
+<div class="row text-muted">
+    {% for apointment in apointments.items %}
+    <div class="col-4">
+        <article class="media content-section" >
+          <div class="media-body">
+            <h2><a class="article-title" href="{{ url_for('apointments.status', apointment_id=apointment.id) }}">Apointment: {{ apointment.title }}</a></h2>
+            <p class="article-content">Doctor: {{ apointment.doctor }}</p>
+            <p class="article-content">Date: {{ apointment.date }}</p>
+            <p class="article-content">Time: {{ apointment.time }}</p>
+            <p class="article-content">Reason for Visit: {{ apointment.reason }}</p>
+            <p class="article-content">Status: {{ apointment.status }}</p>
+            <p class="article-content">Date Created: {{ apointment.date_posted.strftime('%Y-%m-%d') }}</p>
+            <div class="article-metadata">
+              <a href="{{ url_for('apointments.status', apointment_id=apointment.id) }}" class="btn btn-primary me-md-2">View Apointment</a>
+            </div>
+          
+        </article>
+      </div>
+    {% endfor %}
+    </div>
+    <div style=" clear: both;"></div>
+    {% for page_num in apointments.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if apointments.page == page_num %}
+          <a class="btn btn-info mb-4" href="{{ url_for('main.myapointment', page=page_num) }}">{{ page_num }}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('main.myapointment', page=page_num) }}">{{ page_num }}</a>
+        {% endif %}
+      {% else %}
+        ...
+      {% endif %}
+    {% endfor %}
+{% endblock content %}
