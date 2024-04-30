@@ -1,1 +1,1 @@
-A Pathient Management System using Django fraem work.
+A Patient Management System using Django fraem work.
